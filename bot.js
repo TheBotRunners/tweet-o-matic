@@ -52,9 +52,13 @@ function gotData(err, data, response) {
     };
     console.log('');
     if (err) {
+        console.log('===============================================================');
         console.log('Oh no! ಠ_ಠ Something went wrong while i tried to fetch tweets (╥﹏╥) ');
+        console.log('===============================================================');
     } else {
+        console.log('===============================================================');
         console.log('Yes! (^._.^)ﾉ It worked i just fetched some precious tweets from Twitter!');
+        console.log('===============================================================');
     }
 }
 /* Twitter api GET request end*/
