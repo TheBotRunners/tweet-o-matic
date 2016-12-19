@@ -4,12 +4,13 @@
   "description": "Twitter Bot based on the Twit Twitter API Framework",
   "main": "bot.js",
   "scripts": {
-    "start":"node bot.js",
+    "start": "node bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dennis Hadank",
   "license": "ISC",
   "dependencies": {
+    "sleep": "^5.0.0",
     "twit": "^2.2.5"
   }
 }

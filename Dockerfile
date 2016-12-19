@@ -11,9 +11,13 @@ COPY ["config", "."]
 # Installation of required packages
 #RUN sudo mkdir /etc/tweet-o-matic
 #RUN cd /etc/tweet-o-matic
-RUN  sudo\
-      && apt-get update -qq --fix-missing\
+RUN  
+      apt-get update -qq --fix-missing\
       && apt-get install -y --no-install-recommends\
+      nodejs\ 
+      npm\
+      && npm install twit\
+      && sleep
 
 VOLUME /etc/tweet-o-matic
-ENTRYPOINT ["#!/usr/bin/env bash"]
+ENTRYPOINT ["node bot.js"]
