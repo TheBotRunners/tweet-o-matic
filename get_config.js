@@ -8,8 +8,8 @@ module.exports = {
     }
 };
 
-var posts        = String(readFileAsArray('./config/posts.txt')),
-var follow_reply = String(readFileAsArray('./config/follow_reply.txt')),
+posts        = String(readFileAsArray('./config/posts.txt'));
+follow_reply = String(readFileAsArray('./config/follow_reply.txt'));
 
 function readFileAsArray(filename) {
     // Read file as string, split into array at line break and filter empty entries
