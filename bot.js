@@ -29,8 +29,8 @@
 config.get_posts();
 config.get_follow_reply();
 
-console.log('Data from get_posts()' + config.get_posts());
-console.log('Data from get_posts()' + config.get_follow_reply());
+console.log('#   Data from get_posts()' + config.get_posts());
+console.log('#   Data from get_posts()' + config.get_follow_reply());
 
 
     /* Twitter api GET request*/ 
