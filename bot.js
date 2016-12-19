@@ -15,13 +15,19 @@ var T = new Twit(oauth_keys);
 // Sending a Tweet that the bot is started
 console.log('#   The Start up is finished sending tweet to Admin');
 time = new Date().toLocaleTimeString()// gets the system time
+tweeting('Hey Leute ich möchte mich wirklich noch mal bei euch bedanken. Wie ihr seht läuft die Entwicklung auf hochturen! Danke an alle! #Bot');
 //tweeting('@Knadah Start up without any Problems at '+time+' #Bot' );
 var sleep = require('sleep');
 console.log('===============================================================');
 console.log('');
 sleep.sleep(1);//dramatic pause for effect (^⊙﹏⊙^)
 /* Start up end */
+/* Global Var's */
 
+var tweet_it = config.get_post();
+var f_tweet = config.get_follow_reply();
+
+/* Global Var's end */
 /* Bot function */
 
 /* Twitter api GET request*/
@@ -61,20 +67,26 @@ stream.on('follow', followed);
 
 function followed(eventMSG) {
     console.log('===============================================================');
-    console.log('I was followed by ' + screenName + ' (˘▽˘>ԅ( ˘⌣˘)');
+    
     var name = eventMSG.source.name;
     var screenName = eventMSG.source.screen_name;
+    console.log('I was followed by ' + screenName + ' (˘▽˘>ԅ( ˘⌣˘)');
     var r = Math.floor(Math.random() * 100);
-    tweeting('@' + screenName + ' ' + config.get_follow_reply()) + ' #' + r;
+    var f_tweet = config.get_follow_reply();
+    tweeting('@' + screenName + ' ' + f_tweet + ' #bot' + ' #' + r);
     console.log('===============================================================');
 }
 
-function tweeting() {
-    var post = config.get_post();
-    var tweet = {
-        status: post
+function tweeting(tweet_it, f_tweet) {
+    if (f_tweet) {
+        var tweet = {
+            status: f_tweet
+        }
+    }else{
+        var tweet = {
+            status: tweet_it
     }
-
+    }
     T.post('statuses/update', tweet, tweeted);
     function tweeted(err, data, response) {
         if (err) {
