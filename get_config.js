@@ -8,10 +8,10 @@ module.exports = {
     }
 };
 
-posts        = String(readFileAsArray('./config/posts.txt'));
-follow_reply = String(readFileAsArray('./config/follow_reply.txt'));
+var posts        = readFileAsArray('./config/posts.txt');
+var follow_reply = readFileAsArray('./config/follow_reply.txt');
 
 function readFileAsArray(filename) {
     // Read file as string, split into array at line break and filter empty entries
-    return String(require('fs').readFileSync(filename).toString().split('\n').filter(s=>s!=''));
+    return require('fs').readFileSync(filename).toString().split('\n').filter(s=>s!='');
 }
