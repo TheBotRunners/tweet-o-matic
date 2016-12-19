@@ -5,15 +5,15 @@
     console.log('#   Fetching local Data  ...');
     var Twit = require('twit'); // Import Twit package
     var oauth_keys = require('./config/oauth_keys'); // Import tokens from Twitter API :P
-    var to_tweet = require('./config/to_tweet'); // Import tweets :D
-    var to_follow_reply = require('./config/to_follow_reply'); // Import reply tweets for you new Followers *.*
+    var config = require('./get_config');
+    //var to_follow_reply = require('./config/get_config');
+    //var to_tweet = require('./config/to_tweet'); // Import tweets :D
+    //var to_follow_reply = require('./config/to_follow_reply'); // Import reply tweets for you new Followers *.*
     var admin = require('./config/admin'); // Import your Data
     
     console.log('#   Establishing conection to Twitter ...');
     // Creating new Twit object with OAuth credentials you get from config
     var T = new Twit(oauth_keys);
-    console.log('#   Testing Import of to_tweet  ' + to_tweet);
-    console.log('#   Testing Import of to_follow_reply  ' + to_follow_reply );
 // Sending a Tweet that the bot is started
     console.log('#   The Start up is finished sending tweet to Admin');
     time = new Date().toLocaleTimeString()// gets the system time
@@ -26,6 +26,13 @@
   
 /* Bot function */
 
+config.get_posts();
+config.get_follow_reply();
+
+console.log('Data from get_posts()' + config.get_posts());
+console.log('Data from get_posts()' + config.get_follow_reply());
+
+
     /* Twitter api GET request*/ 
     var params = {
        q: 'Knadah', //search querry
@@ -34,15 +41,15 @@
     T.get('search/tweets', params, gotData);
 
     function gotData(err, data, response) {
-    var tweets = data.statuses; //statuses
-    for(var i = 0; i< tweets.length; i++){      
+    var call = data.statuses; //statuses
+    for(var i = 0; i< call.length; i++){      
       console.log('===============================================================');
-      console.log('#   Namen: ' + tweets[i].name);
-      console.log('#   ID: ' + tweets[i].id);
-      console.log('#   ID STR: ' + tweets[i].id_str);
-      console.log('#   Tweet text: ' + tweets[i].text);
-      console.log('#   screen_name: ' + tweets[i].user.screen_name);
-      console.log('#   user_mentions: ' + tweets[i].user.user_mentions);
+      console.log('#   Namen: ' + call[i].name);
+      console.log('#   ID: ' + call[i].id);
+      console.log('#   ID STR: ' + call[i].id_str);
+      console.log('#   Tweet text: ' + call[i].text);
+      console.log('#   screen_name: ' + call[i].user.screen_name);
+      console.log('#   user_mentions: ' + call[i].user.user_mentions);
       console.log('===============================================================');
       console.log('');
      };
