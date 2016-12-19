@@ -3,11 +3,11 @@ module.exports = {
     follow_reply: readFileAsArray('./config/follow_reply.txt'),
     
     get_post: function() {
-        return String(posts[Math.floor(Math.random()*posts.length)]);
+        return String(globals.posts[Math.floor(Math.random()*posts.length)]);
     },
 
     get_follow_reply: function() {
-        return String(follow_reply[Math.floor(Math.random()*follow_reply.length)]);
+        return String(globals.follow_reply[Math.floor(Math.random()*follow_reply.length)]);
     }
 };
 
