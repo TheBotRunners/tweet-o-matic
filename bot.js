@@ -7,6 +7,7 @@ var Twit = require('twit'); // Import Twit package
 var oauth_keys = require('./config/oauth_keys'); // Import tokens from Twitter API :P
 var config = require('./get_config');
 var admin = require('./config/admin'); // Import your Data
+var lookup = require('./lookup.json'); //Setup variable resolving Table
 console.log('#   Data from get_post()' + config.get_post());
 console.log('#   Data from get_follow_reply()' + config.get_follow_reply());
 console.log('#   Establishing conection to Twitter ...');
@@ -15,7 +16,6 @@ var T = new Twit(oauth_keys);
 // Sending a Tweet that the bot is started
 console.log('#   The Start up is finished sending tweet to Admin');
 time = new Date().toLocaleTimeString()// gets the system time
-tweeting('Hey Leute ich möchte mich wirklich noch mal bei euch bedanken. Wie ihr seht läuft die Entwicklung auf hochturen! Danke an alle! #Bot');
 //tweeting('@Knadah Start up without any Problems at '+time+' #Bot' );
 var sleep = require('sleep');
 console.log('===============================================================');
@@ -67,7 +67,7 @@ stream.on('follow', followed);
 
 function followed(eventMSG) {
     console.log('===============================================================');
-    
+
     var name = eventMSG.source.name;
     var screenName = eventMSG.source.screen_name;
     console.log('I was followed by ' + screenName + ' (˘▽˘>ԅ( ˘⌣˘)');
@@ -82,20 +82,33 @@ function tweeting(tweet_it, f_tweet) {
         var tweet = {
             status: f_tweet
         }
-    }else{
+    } else {
         var tweet = {
             status: tweet_it
-    }
+        }
     }
     T.post('statuses/update', tweet, tweeted);
     function tweeted(err, data, response) {
         if (err) {
+            console.log('===============================================================');
             console.log('Oh no! ಠ_ಠ Somthing went wrong while i tried to tweet (╥﹏╥)');
+            console.log('===============================================================');
         } else {
+            console.log('===============================================================');
             console.log('Yes! (^._.^)ﾉ It worked i just posted somthing on Twitter');
             console.log(tweet);
+            console.log('===============================================================');
         }
     }
 }
-    /* Twitter api POST request end*/
+/* Twitter api POST request end*/
+
+//Resolve Text Variables to vars
+function resolve_text(text) {
+    s = String(text);
+    for (key in lookup) {
+        s = s.replace('$' + key, global[lookup[key]]);
+    }
+    return s;
+}
 /* Bot function end */
