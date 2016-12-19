@@ -12,8 +12,8 @@
     console.log('#   Establishing conection to Twitter ...');
     // Creating new Twit object with OAuth credentials you get from config
     var T = new Twit(oauth_keys);
-    console.log('#   Testing Import of to_tweet  ' + t_tweet);
-    console.log('#   Testing Import of to_follow_reply  ' + f_reply);
+    console.log('#   Testing Import of to_tweet  ' + to_tweet);
+    console.log('#   Testing Import of to_follow_reply  ' + to_follow_reply );
 // Sending a Tweet that the bot is started
     console.log('#   The Start up is finished sending tweet to Admin');
     time = new Date().toLocaleTimeString()// gets the system time
