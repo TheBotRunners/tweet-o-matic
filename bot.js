@@ -8,7 +8,6 @@ cw.setSeparatorChar('=');
 cw.setInlineSeparatorChar('#');
 /* Init complete */
 
-cw.add('   The Bot is Starting ＼(^-^)／');
 //Importing Config files
 cw.add('   Fetching local Data  ...');
 var Twit = require('twit'); // Import Twit package
@@ -44,7 +43,7 @@ if (modules.startup_tweet == true) {
     tweeting(admin.admin_handel + ' Start up without any Problems at ' + time + ' #Bot');
 }
 
-console.log(cw.get('Welcome!'));
+console.log(cw.get('The Bot is Starting \\(^-^)/'));
 setTimeout(console.log, 3000);  //dramatic pause for effect (^⊙﹏⊙^)
 /* Start up end */
 
@@ -57,25 +56,22 @@ if (modules.api_call == true) {
         var call = data.statuses; //statuses
         for (var i = 0; i < call.length; i++) {
             console.log('');
-            console.log('===============================================================');
-            console.log('#   Name: ' + call[i].name);
-            console.log('#   ID: ' + call[i].id);
-            console.log('#   ID STR: ' + call[i].id_str);
-            console.log('#   Tweet text: ' + call[i].text);
-            console.log('#   screen_name: ' + call[i].user.screen_name);
-            console.log('#   user_mentions: ' + call[i].user.user_mentions);
-            console.log('===============================================================');
+            cw.add('   Name: ' + call[i].name);
+            cw.add('   ID: ' + call[i].id);
+            cw.add('   ID STR: ' + call[i].id_str);
+            cw.add('   Tweet text: ' + call[i].text);
+            cw.add('   screen_name: ' + call[i].user.screen_name);
+            cw.add('   user_mentions: ' + call[i].user.user_mentions);
+            console.log(cw.get('Tweet'));
         }
 
         console.log('');
         if (err) {
-            console.log('===============================================================');
-            console.log('Oh no! ಠ_ಠ Something went wrong while i tried to fetch tweets (╥﹏╥) ');
-            console.log('===============================================================');
+            cw.add('Oh no! ಠ_ಠ Something went wrong while i tried to fetch tweets (╥﹏╥) ');
+            console.log(cw.get('Error'));
         } else {
-            console.log('===============================================================');
-            console.log('Yes! (^._.^)ﾉ It worked i just fetched some precious tweets from Twitter!');
-            console.log('===============================================================');
+            cw.add('Yes! (^._.^)ﾉ It worked i just fetched some precious tweets from Twitter!');
+            console.log(cw.get('Success!'));
         }
     }
 }
@@ -91,24 +87,22 @@ stream.on('tweet', tweetEvent);
 if (modules.following_Event == true) {
     stream.on('follow', followEvent);
     function followEvent(eventMSG) {
-        console.log('===============================================================');
         var name = eventMSG.source.name;
         var screenName = eventMSG.source.screen_name;
-        console.log('I was followed by ' + screenName + ' (˘▽˘>ԅ( ˘⌣˘)');
+        cw.add('I was followed by ' + screenName + ' (˘▽˘>ԅ( ˘⌣˘)');
         var r = Math.floor(Math.random() * 100);
         var f_tweet = config.get_follow_reply();
         tweeting('@' + screenName + ' ' + f_tweet + ' #bot' + ' #Noch' + r + 'Teller');
-        console.log('===============================================================');
+        console.log(cw.get('Follow'));
     }
 }
 if (modules.tweeting_Event == true) {
     var stream = T.stream('user');
     function tweetEvent(eventMSG) {
-        console.log('===============================================================');
         var from = eventMSG.user.screen_name;
         var replyto = eventMSG.in_reply_to_screen_name;
         var text = eventMSG.text;
-        console.log(from + ' tweeted at me! <3');
+        cw.add(from + ' tweeted at me! <3');
         if (replyto === admin.bot_name) {
             var r = Math.floor(Math.random() * 100);
             var replyTweet = '@' + from + ' #klirren #Bot' + ' #Noch' + r + 'Teller'
@@ -119,7 +113,7 @@ if (modules.tweeting_Event == true) {
         var json = JSON.stringify(eventMSG, null, 2);
         fs.writeFile('call.json', json);
     }
-    console.log('===============================================================');
+    console.log(cw.get('Tweet Event'));
 }
 
 
@@ -136,14 +130,12 @@ function tweeting(tweet_it, f_tweet) {
     T.post('statuses/update', tweet, tweeted);
     function tweeted(err, data) {
         if (err) {
-            console.log('===============================================================');
-            console.log('Oh no! ಠ_ಠ Somthing went wrong while i tried to tweet (╥﹏╥)');
-            console.log('===============================================================');
+            cw.add('Oh no! ಠ_ಠ Somthing went wrong while i tried to tweet (╥﹏╥)');
+            console.log(cw.get('Error'));
         } else {
-            console.log('===============================================================');
-            console.log('Yes! (^._.^)ﾉ It worked i just posted somthing on Twitter');
-            console.log(tweet);
-            console.log('===============================================================');
+            cw.add('Yes! (^._.^)ﾉ It worked i just posted somthing on Twitter');
+            cw.add(tweet);
+            console.log(cw.get('Tweet'));
         }
     }
 }
