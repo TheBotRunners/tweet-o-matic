@@ -1,46 +1,51 @@
 /* Start up */
-console.log('===============================================================');
-console.log('#   The Bot is Starting ＼(^-^)／');
-//Importing Config files
-console.log('#   Fetching local Data  ...');
-var Twit = require('twit'); // Import Twit package
-console.log('#      ==> Getting OAuth Keys');
-var oauth_keys = require('./config/oauth_keys.js'); // Import tokens from Twitter API :P
-console.log('#      ==> Getting the Configuration');
-var config = require('./get_config.js');
-console.log('#      ==> Getting the Modules configuration');
-var modules = require('./config/modules.json');
-console.log('#      ==> Getting Admin data');
-var admin = require('./config/admin.json'); // Import your Data
-console.log('#      ==> Setting up variable resolving Table');
-var lookup = require('./lookup.json'); //Setup variable resolving Table
+
+/* Initialize Logging */
+const EOL = require('os').EOL;
+init_logging('./tweet-o-matic.log');    // Guess what? This Statement - yes, you are right! - initializes the Logging
 var cw = require('./consolewriter.js');
-console.log('#      ==> Setting Global Varriabels');
+cw.setSeparatorChar('=');
+cw.setInlineSeparatorChar('#');
+/* Init complete */
+
+cw.add('   The Bot is Starting ＼(^-^)／');
+//Importing Config files
+cw.add('   Fetching local Data  ...');
+var Twit = require('twit'); // Import Twit package
+cw.add('      ==> Getting OAuth Keys');
+var oauth_keys = require('./config/oauth_keys.js'); // Import tokens from Twitter API :P
+cw.add('      ==> Getting the Configuration');
+var config = require('./get_config.js');
+cw.add('      ==> Getting the Modules configuration');
+var modules = require('./config/modules.json');
+cw.add('      ==> Getting Admin data');
+var admin = require('./config/admin.json'); // Import your Data
+cw.add('      ==> Setting up variable resolving Table');
+var lookup = require('./lookup.json'); //Setup variable resolving Table
+cw.add('      ==> Setting Global Varriabels');
 /* Global Var's */
-    var time = new Date().toLocaleTimeString()// gets the system time
-    var tweet_it = config.get_post();
-    var f_tweet = config.get_follow_reply();
-    var params = {
-        q: admin.search_querry, //search querry from admin.json
-        count: admin.count_call //total counts of returning data from admin.json
-    }
+var time = new Date().toLocaleTimeString()// gets the system time
+var tweet_it = config.get_post();
+var f_tweet = config.get_follow_reply();
+var params = {
+    q: admin.search_querry, //search querry from admin.json
+    count: admin.count_call //total counts of returning data from admin.json
+}
 /* Global Var's end */
-console.log('#   Testing imported Data');
-console.log('#      ==> Data from get_post() ' + config.get_post());
-console.log('#      ==> Data from get_follow_reply() ' + config.get_follow_reply());
-console.log('#   Establishing conection to Twitter ...');
+cw.add('   Testing imported Data');
+cw.add('      ==> Data from get_post() ' + config.get_post());
+cw.add('      ==> Data from get_follow_reply() ' + config.get_follow_reply());
+cw.add('   Establishing conection to Twitter ...');
 // Creating new Twit object with OAuth credentials you get from config
 var T = new Twit(oauth_keys);
 // Sending a Tweet that the bot is started
 if (modules.startup_tweet == true) {
-    console.log('#   The Start up is finished sending tweet to Admin');
+    cw.add('   The Start up is finished sending tweet to Admin');
     tweeting(admin.admin_handel + ' Start up without any Problems at ' + time + ' #Bot');
 }
 
-var sleep = require('sleep');
-console.log('===============================================================');
-console.log('');
-sleep.sleep(1);//dramatic pause for effect (^⊙﹏⊙^)
+console.log(cw.get('Welcome!'));
+setTimeout(console.log, 3000);  //dramatic pause for effect (^⊙﹏⊙^)
 /* Start up end */
 
 
@@ -109,11 +114,11 @@ if (modules.tweeting_Event == true) {
             var replyTweet = '@' + from + ' #klirren #Bot' + ' #Noch' + r + 'Teller'
             tweeting(replyTweet);
             //console.log(tweet);
-       }
-    var fs = require('fs');
-    var json = JSON.stringify(eventMSG, null, 2);
-    fs.writeFile('call.json', json);    
-}
+        }
+        var fs = require('fs');
+        var json = JSON.stringify(eventMSG, null, 2);
+        fs.writeFile('call.json', json);
+    }
     console.log('===============================================================');
 }
 
@@ -152,4 +157,26 @@ function resolve_text(text) {
     }
     return s;
 }
-    /* Bot function end */
+
+/**
+ * Initialize Logging
+ */
+function init_logging(logfile) {
+    var fs = require('fs');
+    var util = require('util');
+    var moment = require('moment');
+    
+    fs.writeFileSync(logfile, "Tweet-o-Matic " + require('./package.json').version + " Log File from " + moment().format('MMMM Do YYYY, h:mm:ss a') + require('os').EOL.repeat(2));
+    console_default = new console.Console(process.stdout);
+    console_hybrid = new console.Console(process.stdout);
+
+    console.log = function () {
+        console_default.log(util.format.apply(console_default, arguments));
+        var tmp = util.format.apply(this, arguments);
+        var test = tmp.split(EOL);
+        test.forEach(function (item, index, array) {
+            fs.appendFileSync(logfile, (item) + EOL);
+        });
+    }
+}
+/* Bot function end */

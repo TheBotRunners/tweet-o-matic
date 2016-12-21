@@ -5,7 +5,12 @@
  * 
  * Usage:
  *  cw = require('./consolewriter.js');
- *  cw.add('Simple Console Utility to format Output in Blocks.\n\nUsage:\n cw = require('./consolewriter.js');\n cw.add('Example Text');\n console.log(cw.get('Test'));');
+ *  cw.add('Simple Console Utility to format Output in Blocks.');
+ *  cw.add();
+ *  cw.add('Usage:');
+ *  cw.add(" cw = require('./consolewriter.js');");
+ *  cw.add(" cw.add('Example Text');");
+ *  cw.add(" console.log(cw.get('Test'));");
  *  console.log(cw.get('consolewriter.js'));
  * 
  * Output:                                               
@@ -20,6 +25,8 @@
  */
 
 // Begin Variables
+const EOL = require('os').EOL;
+
 var char = '#';                 // Default Separator Character. Example Separator: '####################'
 var inline_char = '=';          // Default Inline Separator Character.    Example: '#                  #'
 var inBlock = false;            // Monitor Variable which tells wether a new Block has been started.
@@ -34,7 +41,7 @@ module.exports = {
     add: function (text) {
         inBlock = true;                                         // Start new Block
         text = text === undefined ? String() : String(text);    // Catch no Argument
-        input = input.concat(text.split('\n'));                 // Append new Text
+        input = input.concat(text.split(EOL));                 // Append new Text
     },
 
     /**
@@ -86,7 +93,7 @@ module.exports = {
 
         inBlock = false;    // Block has been finished
 
-        return output.join('\n');   // Return Result as single String for comfort (can be printed with console.log())
+        return output.join(EOL);   // Return Result as single String for comfort (can be printed with console.log())
     },
 
     /**
