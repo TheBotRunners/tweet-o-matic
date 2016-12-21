@@ -1,5 +1,5 @@
 {
-  "name": "tweet-o-matic",
+  "name": "Tweet-o-Matic",
   "version": "1.0.0",
   "description": "Twitter Bot based on the Twit Twitter API Framework",
   "main": "bot.js",

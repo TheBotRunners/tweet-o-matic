@@ -2,7 +2,11 @@
 
 /* Initialize Logging */
 const EOL = require('os').EOL;
-init_logging('./tweet-o-matic.log');    // Guess what? This Statement - yes, you are right! - initializes the Logging
+const package = require('./package.json');
+var moment = require('moment');
+var fs = require('fs');
+var util = require('util');
+init_logging('./logs/' + moment().format('YYYY-MM-DD-hh-mm-ss'), 5);    // Guess what? This Statement - yes, you are right! - initializes the Logging
 var cw = require('./consolewriter.js');
 cw.setSeparatorChar('=');
 cw.setInlineSeparatorChar('#');
@@ -26,7 +30,7 @@ cw.add('      ==> Setting up variable resolving Table');
 var lookup = require('./lookup.json'); //Setup variable resolving Table
 cw.add('      ==> Setting Global Varriabels');
 /* Global Var's */
-var time = new Date().toLocaleTimeString()// gets the system time
+var time = moment().format('HH:mm:ss')  // gets the system time
 var tweet_it = config.get_post();
 var f_tweet = config.get_follow_reply();
 var params = {
@@ -53,7 +57,6 @@ setTimeout(console.log, 3000);  //dramatic pause for effect (^⊙﹏⊙^)
 
 /* Bot function */
 
-T.get('search/tweets', params, gotData);
 if (modules.api_call == true) {
     function gotData(err, data) {
         var call = data.statuses; //statuses
@@ -78,6 +81,7 @@ if (modules.api_call == true) {
         }
     }
 }
+T.get('search/tweets', params, gotData);
 /* Twitter api GET request end*/
 
 /* Twitter api POST request*/
@@ -157,14 +161,14 @@ function resolve_text(text) {
 }
 
 /**
- * Initialize Logging
+ * Initialize Logging.
+ * @param logfile The file to log to 
+ * @param max_logfiles 
  */
-function init_logging(logfile) {
-    var fs = require('fs');
-    var util = require('util');
-    var moment = require('moment');
-
-    fs.writeFileSync(logfile, "Tweet-o-Matic " + require('./package.json').version + " Log File from " + moment().format('MMMM Do YYYY, h:mm:ss a') + require('os').EOL.repeat(2));
+function init_logging(logfile, max_logfiles) {
+    var index = logfile.lastIndexOf('.');
+    if (index == -1 || logfile.substring(index) != '.log') { logfile += '.log'; }
+    fs.writeFileSync(logfile, "Tweet-o-Matic " + require('./package.json').version + " Log File from " + moment().format('MMMM Do YYYY, hh:mm:ss') + require('os').EOL.repeat(2));
     console_default = new console.Console(process.stdout);
     console_hybrid = new console.Console(process.stdout);
 

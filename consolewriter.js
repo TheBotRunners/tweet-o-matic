@@ -91,9 +91,9 @@ module.exports = {
             }
         })
 
-        inBlock = false;    // Block has been finished
-
-        return output.join(EOL);   // Return Result as single String for comfort (can be printed with console.log())
+        inBlock = false;            // Block has been finished
+        input = [];                 // Clear Buffer
+        return output.join(EOL);    // Return Result as single String for comfort (can be printed with console.log())
     },
 
     /**
