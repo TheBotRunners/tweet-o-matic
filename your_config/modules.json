@@ -1,3 +1,6 @@
 {
-    "startup_tweet" : "true"
+    "startup_tweet": "true",
+    "api_call": "true",
+    "following_Event": "true",
+    "tweeting_Event": "true"
 }
