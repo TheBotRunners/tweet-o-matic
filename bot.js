@@ -9,14 +9,8 @@ cw.setInlineSeparatorChar('#');
 /* Init complete */
 
 var figlet = require('figlet')
-figlet('Tweet-o-matic', function(err, data) {
-    if (err) {
-        console.log('Something went wrong...');
-        console.dir(err);
-        return;
-    }
-    console.log(data)
-});
+console.log(figlet.textSync('Tweet-o-matic', {}));
+
 //Importing Config files
 cw.add('   Fetching local Data  ...');
 var Twit = require('twit'); // Import Twit package
@@ -95,7 +89,7 @@ if (modules.api_call == true) {
 var stream = T.stream('user');
 
 if (modules.following_Event == true) {
-    
+
     function followEvent(eventMSG) {
         stream.on = T.stream('follow', followEvent);
         var name = eventMSG.source.name;
@@ -108,7 +102,7 @@ if (modules.following_Event == true) {
     }
 }
 
-if (modules.tweeting_Event == true) {  
+if (modules.tweeting_Event == true) {
     function tweetEvent(eventMSG) {
         stream.on = T.stream('tweeting', tweetEvent);
         var from = eventMSG.user.screen_name;
@@ -124,8 +118,8 @@ if (modules.tweeting_Event == true) {
         var fs = require('fs');
         var json = JSON.stringify(eventMSG, null, 2);
         fs.writeFile('call.json', json);
+        console.log(cw.get('Tweet Event'));
     }
-    console.log(cw.get('Tweet Event'));
 }
 
 
@@ -169,7 +163,7 @@ function init_logging(logfile) {
     var fs = require('fs');
     var util = require('util');
     var moment = require('moment');
-    
+
     fs.writeFileSync(logfile, "Tweet-o-Matic " + require('./package.json').version + " Log File from " + moment().format('MMMM Do YYYY, h:mm:ss a') + require('os').EOL.repeat(2));
     console_default = new console.Console(process.stdout);
     console_hybrid = new console.Console(process.stdout);

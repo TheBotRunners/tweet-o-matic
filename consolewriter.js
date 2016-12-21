@@ -56,7 +56,7 @@ module.exports = {
         var max_len = 0;    // Length of longest Text Line
         var output = [];    // Output Buffer
 
-        if (!inBlock) { return getSeparator(maxwidth); }    // If we are not inside a Block return a Separator with maxwidth
+        if (!inBlock) { return char.repeat(maxwidth); }    // If we are not inside a Block return a Separator with maxwidth
 
         output.push('');    // Reserve first Line for Separator
 
