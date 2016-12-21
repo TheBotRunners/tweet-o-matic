@@ -1,6 +1,15 @@
 /* Start up */
+var figlet = require('figlet')
+figlet('Tweet-o-matic', function(err, data) {
+    if (err) {
+        console.log('Something went wrong...');
+        console.dir(err);
+        return;
+    }
+    console.log(data)
+});
 console.log('===============================================================');
-console.log('#   The Bot is Starting ＼(^-^)／');
+console.log('#   The Bot is Starting \\(^-^)/');
 //Importing Config files
 console.log('#   Fetching local Data  ...');
 var Twit = require('twit'); // Import Twit package
@@ -40,7 +49,7 @@ if (modules.startup_tweet == true) {
 var sleep = require('sleep');
 console.log('===============================================================');
 console.log('');
-sleep.sleep(1);//dramatic pause for effect (^⊙﹏⊙^)
+//sleep.sleep(1);//dramatic pause for effect (^⊙﹏⊙^)
 /* Start up end */
 
 
@@ -81,11 +90,13 @@ if (modules.api_call == true) {
 /*Setting up a User Stream*/
 
 
-stream.on('tweet', tweetEvent);
 /*Setting up a User Stream*/
+var stream = T.stream('user');
+
 if (modules.following_Event == true) {
-    stream.on('follow', followEvent);
+    
     function followEvent(eventMSG) {
+        stream.on = T.stream('follow', followEvent);
         console.log('===============================================================');
         var name = eventMSG.source.name;
         var screenName = eventMSG.source.screen_name;
@@ -96,9 +107,10 @@ if (modules.following_Event == true) {
         console.log('===============================================================');
     }
 }
-if (modules.tweeting_Event == true) {
-    var stream = T.stream('user');
+
+if (modules.tweeting_Event == true) {  
     function tweetEvent(eventMSG) {
+        stream.on = T.stream('tweeting', tweetEvent);
         console.log('===============================================================');
         var from = eventMSG.user.screen_name;
         var replyto = eventMSG.in_reply_to_screen_name;

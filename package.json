@@ -1,5 +1,5 @@
 {
-  "name": "Tweet-o-matic",
+  "name": "Tweet-o-Matic",
   "version": "1.0.0",
   "description": "Twitter Bot based on the Twit Twitter API Framework",
   "main": "bot.js",
@@ -10,7 +10,7 @@
   "author": "Dennis Hadank",
   "license": "ISC",
   "dependencies": {
-    "sleep": "^5.0.0",
+    "figlet": "^1.2.0",
     "twit": "^2.2.5"
   }
 }
