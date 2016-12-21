@@ -1,0 +1,7 @@
+{
+    "admin_handel" : "the name of your personal twitter account you have to write it with @",
+    "search_querry" : "things you want to get from the Twitter API i suggest you twitter name",
+    "bot_name":"The @name of your bot",
+    "count_call" : "1"
+}
+
