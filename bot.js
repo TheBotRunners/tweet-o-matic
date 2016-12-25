@@ -3,16 +3,18 @@
 /* Initialize Logging */
 const EOL = require('os').EOL;
 const package = require('./package.json');
-var moment = require('moment');
-var fs = require('fs');
-var util = require('util');
+const moment = require('moment');
+const fs = require('fs');
+const util = require('util');
+const path = require('path');
+const mkdirp = require('mkdirp');
 init_logging('./logs/' + moment().format('YYYY-MM-DD-hh-mm-ss'), 5);    // Guess what? This Statement - yes, you are right! - initializes the Logging
-var cw = require('./consolewriter.js');
+const cw = require('./consolewriter.js');
 cw.setSeparatorChar('=');
 cw.setInlineSeparatorChar('#');
 /* Init complete */
 
-var figlet = require('figlet')
+const figlet = require('figlet')
 console.log(figlet.textSync('Tweet-o-matic', {}));
 
 //Importing Config files
@@ -163,9 +165,33 @@ function resolve_text(text) {
 /**
  * Initialize Logging.
  * @param logfile The file to log to 
- * @param max_logfiles 
+ * @param max_logfiles Maximum Amount of Logfiles to keep
  */
 function init_logging(logfile, max_logfiles) {
+    var containingFolderPath = path.dirname(logfile);
+    mkdirp.sync(containingFolderPath);
+    var files = fs.readdirSync(containingFolderPath);
+
+    if (files.length >= max_logfiles) {
+        var regex = /[0-9]{4}(-[0-9]{2}){5}.log/;
+        var logs = [];
+        files.forEach(function (item, index, array) {
+            if (item.match(regex)) { logs.push(item); }
+        });
+
+        if (logs.length >= max_logfiles) {
+            var oldestFile = "";
+            var oldestDate = Number.MAX_SAFE_INTEGER;
+
+            logs.forEach(function (item, index, array) {
+                var date = item.substring(0, item.lastIndexOf('.')).replace(/-/g, '');
+                if (date < oldestDate) { oldestDate = date; oldestFile = item; }
+            });
+
+            fs.unlinkSync(containingFolderPath + '/' + oldestFile);
+        }
+    }
+
     var index = logfile.lastIndexOf('.');
     if (index == -1 || logfile.substring(index) != '.log') { logfile += '.log'; }
     fs.writeFileSync(logfile, "Tweet-o-Matic " + require('./package.json').version + " Log File from " + moment().format('MMMM Do YYYY, hh:mm:ss') + require('os').EOL.repeat(2));
