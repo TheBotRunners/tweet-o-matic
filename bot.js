@@ -164,47 +164,50 @@ function resolve_text(text) {
 
 /**
  * Initialize Logging.
- * @param logfile The file to log to 
- * @param max_logfiles Maximum Amount of Logfiles to keep
+ * @param logfile The file to log to.
+ * @param max_logfiles Maximum Amount of Logfiles to keep.
  */
 function init_logging(logfile, max_logfiles) {
-    var containingFolderPath = path.dirname(logfile);
-    mkdirp.sync(containingFolderPath);
-    var files = fs.readdirSync(containingFolderPath);
+    var containingFolderPath = path.dirname(logfile);   // Get Logfolder from Logpath
+    mkdirp.sync(containingFolderPath);                  // Make sure containing Folder and every Folder along the Path are existing and create them if not
 
-    if (files.length >= max_logfiles) {
-        var regex = /[0-9]{4}(-[0-9]{2}){5}.log/;
-        var logs = [];
-        files.forEach(function (item, index, array) {
-            if (item.match(regex)) { logs.push(item); }
-        });
+    // BEGIN Removal of old Logfiles
+    var files = fs.readdirSync(containingFolderPath);   // Read Log Directory
 
-        if (logs.length >= max_logfiles) {
-            var oldestFile = "";
-            var oldestDate = Number.MAX_SAFE_INTEGER;
+    if (files.length >= max_logfiles) {                 // Check wether there are more Files than allowed
+        var regex = /[0-9]{4}(-[0-9]{2}){5}.log/;       // RegEx to recognize Logfiles
+        var logs = [];                                  // Logfiles in folder
+        files.forEach(function (item, index, array)     // Filter for Logfile RegEx (There could be other Files in the Directory, who knows?)
+        { if (item.match(regex)) logs.push(item); });
 
-            logs.forEach(function (item, index, array) {
+        if (logs.length >= max_logfiles) {              // Recheck if recognized Files are still too many
+            var oldestFile = "";                        // Name of oldest Log
+            var oldestDate = Number.MAX_SAFE_INTEGER;   // Oldest Logfile Date (Initialized with highest Value possible, since we search for Dates lower then the previous oldest Date)
+
+            logs.forEach(function (item, index, array) {// Compare Logfiles by Creation Date and select oldest
                 var date = item.substring(0, item.lastIndexOf('.')).replace(/-/g, '');
                 if (date < oldestDate) { oldestDate = date; oldestFile = item; }
             });
 
-            fs.unlinkSync(containingFolderPath + '/' + oldestFile);
+            fs.unlinkSync(containingFolderPath + '/' + oldestFile); // Delete oldest Log
         }
     }
+    // END Removal of old Logfiles
 
+    // BEGIN Actual Initialization
     var index = logfile.lastIndexOf('.');
-    if (index == -1 || logfile.substring(index) != '.log') { logfile += '.log'; }
-    fs.writeFileSync(logfile, "Tweet-o-Matic " + require('./package.json').version + " Log File from " + moment().format('MMMM Do YYYY, hh:mm:ss') + require('os').EOL.repeat(2));
-    console_default = new console.Console(process.stdout);
-    console_hybrid = new console.Console(process.stdout);
+    if (index == -1 || logfile.substring(index) != '.log') { logfile += '.log'; }   // Verify that the Logfile specified ends with '.log'
+    fs.writeFileSync(logfile,"Tweet-o-Matic "                                       // Write Log Signature
+                            + require('./package.json').version
+                            + " Log File from "
+                            + moment().format('MMMM Do YYYY, hh:mm:ss')
+                            + require('os').EOL.repeat(2));
+    console_default = new console.Console(process.stdout);                          // Create new default Console with STDOUT set to the Console
 
-    console.log = function () {
+    console.log = function () {                                                     // Overwrite log Routine of System Console
         console_default.log(util.format.apply(console_default, arguments));
-        var tmp = util.format.apply(this, arguments);
-        var test = tmp.split(EOL);
-        test.forEach(function (item, index, array) {
-            fs.appendFileSync(logfile, (item) + EOL);
-        });
+        util.format.apply(this, arguments).split(EOL).forEach(function (item, index, array) { fs.appendFileSync(logfile, (item) + EOL); });
     }
+    // END Actual Initialization
 }
 /* Bot function end */
