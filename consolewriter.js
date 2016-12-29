@@ -26,6 +26,7 @@
 
 // Begin Variables
 const EOL = require('os').EOL;
+const util = require('util');
 
 var char = '#';                 // Default Separator Character. Example Separator: '####################'
 var inline_char = '=';          // Default Inline Separator Character.    Example: '#                  #'
@@ -40,8 +41,9 @@ module.exports = {
      */
     add: function (text) {
         inBlock = true;                                         // Start new Block
+        text = util.format.apply(this, arguments)
         text = text === undefined ? String() : String(text);    // Catch no Argument
-        input = input.concat(text.split(EOL));                 // Append new Text
+        input = input.concat(text.split(EOL));                  // Append new Text
     },
 
     /**

@@ -95,9 +95,9 @@ T.get('search/tweets', params, gotData);
 var stream = T.stream('user');
 
 if (modules.following_Event == true) {
-
+    stream.on('follow', followEvent);
     function followEvent(eventMSG) {
-        stream.on = T.stream('follow', followEvent);
+        // stream.on = T.stream('follow', followEvent);
         var name = eventMSG.source.name;
         var screenName = eventMSG.source.screen_name;
         cw.add('I was followed by ' + screenName + ' (˘▽˘>ԅ( ˘⌣˘)');
@@ -109,8 +109,9 @@ if (modules.following_Event == true) {
 }
 
 if (modules.tweeting_Event == true) {
+    stream.on('tweet', tweetEvent);
     function tweetEvent(eventMSG) {
-        stream.on = T.stream('tweeting', tweetEvent);
+        // stream.on = T.stream('tweeting', tweetEvent);
         var from = eventMSG.user.screen_name;
         var replyto = eventMSG.in_reply_to_screen_name;
         var text = eventMSG.text;
@@ -121,7 +122,6 @@ if (modules.tweeting_Event == true) {
             tweeting(replyTweet);
             //console.log(tweet);
         }
-        var fs = require('fs');
         var json = JSON.stringify(eventMSG, null, 2);
         fs.writeFile('call.json', json);
         console.log(cw.get('Tweet Event'));
